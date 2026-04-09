@@ -3,6 +3,8 @@ QuickChat assistant
 Description - 
 A simple AI chat application where users can sign up, log in, chat with AI, and view or delete chat history.
 
+Live Demo - https://quickchatassistant.netlify.app/ 
+
 Tech Stack - 
 HTML, CSS, JavaScript-frontend
 Node.js, Express, MongoDB-backend
