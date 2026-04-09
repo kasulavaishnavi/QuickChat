@@ -1,5 +1,5 @@
 let currentChatId = null;
-const baseAPI = "http://localhost:4000";
+const baseAPI = "https://quickchat-4jrl.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
