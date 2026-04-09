@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickChat | Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/147cc8ea22.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2><i class="fa-solid fa-robot"></i> QuickChat Assistant</h2>
+
+            <div class="auth-header">
+                <h4>Welcome back</h4>
+                <h6>Enter your credentials to access your conversations</h6>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" placeholder="name@gmail.com" id="email" required autocomplete="email" />
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" placeholder="Enter your password" id="password" required
+                        autocomplete="current-password" />
+                </div>
+
+                <button type="submit" class="auth-btn">Login</button>
+            </form>
+
+            <div class="auth-footer">
+                Don't have an account? <a href="signup.html" id="signup">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

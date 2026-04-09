@@ -1,0 +1,245 @@
+let currentChatId = null;
+const baseAPI = "http://localhost:4000/api";
+/* ------------------ INIT ------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+
+  // 🔐 Protect chat page
+  if (!token && window.location.pathname.includes("aiChat.html")) {
+    window.location.replace("index.html");
+    return;
+  }
+
+  // store globally
+  window.token = token;
+
+  // Login page
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) handleLogin();
+
+  // Signup page
+  const signupForm = document.getElementById("signupForm");
+  if (signupForm) handleSignup();
+
+  // Chat page
+  const sendBtn = document.getElementById("sendBtn");
+  const newTextBtn = document.getElementById("newTextBtn");
+
+  if (sendBtn) sendBtn.addEventListener("click", sendMessage);
+  if (newTextBtn) newTextBtn.addEventListener("click", createChat);
+
+  if (window.location.pathname.includes("aiChat.html")) {
+    loadChats();
+  }
+});
+
+function handleLogin() {
+  const form = document.getElementById("loginForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const res = await fetch(`${baseAPI}/user/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      localStorage.setItem("token", data.token);
+      window.location.href = "aiChat.html";
+    } else {
+      alert(data.message);
+    }
+  });
+}
+
+function handleSignup() {
+  const form = document.getElementById("signupForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const res = await fetch(`${baseAPI}/user/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      localStorage.setItem("token", data.token);
+      window.location.href = "aiChat.html";
+    } else {
+      alert(data.message);
+    }
+  });
+}
+
+async function loadChats() {
+  const chatListDiv = document.getElementById("chatList");
+
+  const res = await fetch(`${baseAPI}/chat/get`, {
+    headers: { Authorization: `Bearer ${window.token}` },
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    chatListDiv.innerHTML = "";
+    const chats = data.chats.reverse();
+    chats.forEach((chat) => {
+      const div = document.createElement("div");
+
+      div.className = `chat-item ${
+        currentChatId === chat._id ? "active-chat" : ""
+      }`;
+
+      div.innerHTML = `
+        <span onclick="switchChat('${chat._id}')">
+          ${chat.messages[0]?.content.slice(0, 20) || "New Chat"}...
+        </span>
+        <span onclick="deleteChat('${chat._id}')">🗑️</span>
+      `;
+
+      chatListDiv.appendChild(div);
+    });
+  }
+}
+
+async function switchChat(id) {
+  currentChatId = id;
+
+  const messagesDiv = document.getElementById("messages");
+  messagesDiv.innerHTML = "";
+
+  const res = await fetch(`${baseAPI}/chat/get`, {
+    headers: { Authorization: `Bearer ${window.token}` },
+  });
+
+  const data = await res.json();
+
+  const chat = data.chats.find((c) => c._id === id);
+
+  if (chat) {
+    chat.messages.forEach((msg) => {
+      addMessage(msg.role === "user" ? "You" : "AI", msg.content);
+    });
+  }
+
+  loadChats();
+}
+
+async function createChat() {
+  const res = await fetch(`${baseAPI}/chat/create`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${window.token}` },
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    currentChatId = data.chatId;
+    document.getElementById("messages").innerHTML = "";
+    loadChats();
+  }
+}
+
+async function deleteChat(id) {
+  const res = await fetch(`${baseAPI}/chat/delete/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${window.token}` },
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    if (currentChatId === id) {
+      currentChatId = null;
+      document.getElementById("messages").innerHTML = "";
+    }
+    loadChats();
+  }
+}
+
+async function sendMessage() {
+  const input = document.getElementById("textInput");
+  const text = input.value;
+
+  if (!text) return;
+
+  if (!currentChatId) {
+    alert("Create chat first");
+    return;
+  }
+
+  hideWelcome();
+
+  addMessage("You", text);
+  input.value = "";
+
+  const res = await fetch(`${baseAPI}/chat/text`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${window.token}`,
+    },
+    body: JSON.stringify({
+      chatId: currentChatId,
+      prompt: text,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    addMessage("AI", data.reply.content);
+  } else {
+    alert(data.message);
+  }
+}
+
+function addMessage(sender, text) {
+  const messagesDiv = document.getElementById("messages");
+
+  const div = document.createElement("div");
+  div.className = sender === "You" ? "user-msg" : "ai-msg";
+  div.innerText = text;
+
+  messagesDiv.appendChild(div);
+
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+LOGOUT;
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "index.html";
+}
+
+function showWelcome() {
+  const welcome = document.getElementById("welcomeScreen");
+  const messages = document.getElementById("messages");
+
+  if (welcome) welcome.style.display = "flex";
+  if (messages) messages.innerHTML = "";
+}
+
+function hideWelcome() {
+  const welcome = document.getElementById("welcomeScreen");
+  if (welcome) welcome.style.display = "none";
+}
