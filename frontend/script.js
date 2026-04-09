@@ -1,5 +1,5 @@
 let currentChatId = null;
-const baseAPI = "http://localhost:4000/api";
+const baseAPI = "https://quickchat-4jrl.onrender.com";
 /* ------------------ INIT ------------------ */
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
@@ -42,7 +42,7 @@ function handleLogin() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const res = await fetch(`${baseAPI}/user/login`, {
+    const res = await fetch(`${baseAPI}/api/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,7 +71,7 @@ function handleSignup() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    const res = await fetch(`${baseAPI}/user/signup`, {
+    const res = await fetch(`${baseAPI}/api/user/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -93,7 +93,7 @@ function handleSignup() {
 async function loadChats() {
   const chatListDiv = document.getElementById("chatList");
 
-  const res = await fetch(`${baseAPI}/chat/get`, {
+  const res = await fetch(`${baseAPI}/api/chat/get`, {
     headers: { Authorization: `Bearer ${window.token}` },
   });
 
@@ -127,7 +127,7 @@ async function switchChat(id) {
   const messagesDiv = document.getElementById("messages");
   messagesDiv.innerHTML = "";
 
-  const res = await fetch(`${baseAPI}/chat/get`, {
+  const res = await fetch(`${baseAPI}/api/chat/get`, {
     headers: { Authorization: `Bearer ${window.token}` },
   });
 
@@ -145,7 +145,7 @@ async function switchChat(id) {
 }
 
 async function createChat() {
-  const res = await fetch(`${baseAPI}/chat/create`, {
+  const res = await fetch(`${baseAPI}/api/chat/create`, {
     method: "POST",
     headers: { Authorization: `Bearer ${window.token}` },
   });
@@ -160,7 +160,7 @@ async function createChat() {
 }
 
 async function deleteChat(id) {
-  const res = await fetch(`${baseAPI}/chat/delete/${id}`, {
+  const res = await fetch(`${baseAPI}/api/chat/delete/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${window.token}` },
   });
@@ -192,7 +192,7 @@ async function sendMessage() {
   addMessage("You", text);
   input.value = "";
 
-  const res = await fetch(`${baseAPI}/chat/text`, {
+  const res = await fetch(`${baseAPI}/api/chat/text`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
