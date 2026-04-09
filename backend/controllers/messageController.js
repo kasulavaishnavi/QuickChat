@@ -41,7 +41,6 @@ const textMsgController = async (req, res) => {
     chat.messages.push(reply);
 
     await chat.save();
-    await User.updateOne({ _id: userId });
 
     res.json({ success: true, reply });
   } catch (error) {

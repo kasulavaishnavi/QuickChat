@@ -81,6 +81,11 @@ body {
   background: #8ec7fc;
 }
 
+#currentChat .chat-item {
+  background: #8ec7fc;
+  font-weight: bold;
+}
+
 /* PROFILE */
 .profile {
   padding: 10px;
