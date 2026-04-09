@@ -1,5 +1,5 @@
 import Chat from "../models/chatModel.js";
-import User from "../models/usermodel.js";
+import User from "../models/userModel.js";
 import groq from "../configs/groq.js"; // Import the new Groq config
 
 const textMsgController = async (req, res) => {
