@@ -152,7 +152,7 @@ async function switchChat(id) {
   }
 
   hideWelcome();
-  // loadChats();
+  loadChats();
 }
 
 async function createChat() {
