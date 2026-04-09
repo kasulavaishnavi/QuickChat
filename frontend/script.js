@@ -1,7 +1,7 @@
 let currentChatId = null;
 const baseAPI = "https://quickchat-4jrl.onrender.com";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("token");
 
   // Protect chat page
@@ -25,12 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (newTextBtn) newTextBtn.addEventListener("click", createChat);
 
   if (window.location.pathname.includes("aiChat.html")) {
-    loadChats();
-
-    const savedChatId = localStorage.getItem("activeChatId");
-    if (savedChatId) {
-      switchChat(savedChatId); // This restores the messages and input box
-    }
+    await loadChats();
   }
 
   const input = document.getElementById("textInput");
@@ -157,7 +152,7 @@ async function switchChat(id) {
   }
 
   hideWelcome();
-  loadChats();
+  // loadChats();
 }
 
 async function createChat() {
