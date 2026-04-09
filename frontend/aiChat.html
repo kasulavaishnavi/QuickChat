@@ -1,16 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>QuickChat | Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
     <div class="container">
-
         <!-- SIDEBAR -->
         <div class="sidebar">
             <div class="miniContainer">
@@ -26,7 +25,7 @@
 
                 <!-- PROFILE -->
                 <div class="profile">
-                    <span>👤</span>
+                    <span><i class="fa-solid fa-user"></i></span>
                     <button id="logout" onclick="logout()">Logout</button>
                 </div>
             </div>
@@ -35,25 +34,23 @@
         <!-- CHAT AREA -->
         <div class="chat-area">
             <div class="miniContainer2">
-
-
                 <div id="welcomeScreen" class="welcome-screen">
                     <h2>Ready to start something new?</h2>
                     <p>
-                        Your conversation history is empty. Ask a question, explore a topic,
-                        or just say hello to get started.
+                        Your conversation history is empty. Ask a question, explore a
+                        topic, or just say hello to get started.
                     </p>
-                    <!-- <button onclick="createChat()">+ Start a New Conversation</button> -->
                 </div>
                 <div id="messages"></div>
 
                 <div class="input-box">
                     <input type="text" id="textInput" placeholder="Type a message..." />
-                    <button id="sendBtn">Send</button>
+                    <button id="sendBtn">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script src="script.js"></script>

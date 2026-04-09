@@ -1,27 +1,27 @@
 let currentChatId = null;
 const baseAPI = "https://quickchat-4jrl.onrender.com";
-/* ------------------ INIT ------------------ */
+
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
 
-  // 🔐 Protect chat page
+  // Protecting the chat page - if token stored in local storage then access it
   if (!token && window.location.pathname.includes("aiChat.html")) {
     window.location.replace("index.html");
     return;
   }
 
-  // store globally
+  // storing it globally
   window.token = token;
 
-  // Login page
+  //login
   const loginForm = document.getElementById("loginForm");
   if (loginForm) handleLogin();
 
-  // Signup page
+  //signup
   const signupForm = document.getElementById("signupForm");
   if (signupForm) handleSignup();
 
-  // Chat page
+  //chat
   const sendBtn = document.getElementById("sendBtn");
   const newTextBtn = document.getElementById("newTextBtn");
 
@@ -32,6 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
     loadChats();
   }
 });
+
+//handling login
 
 function handleLogin() {
   const form = document.getElementById("loginForm");
@@ -61,6 +63,7 @@ function handleLogin() {
   });
 }
 
+//handling signup
 function handleSignup() {
   const form = document.getElementById("signupForm");
 
@@ -90,6 +93,8 @@ function handleSignup() {
   });
 }
 
+//loading the chats
+
 async function loadChats() {
   const chatListDiv = document.getElementById("chatList");
 
@@ -102,6 +107,11 @@ async function loadChats() {
   if (data.success) {
     chatListDiv.innerHTML = "";
     const chats = data.chats.reverse();
+
+    if (chats.length > 0 && !currentChatId) {
+      currentChatId = chats[0]._id;
+      switchChat(currentChatId);
+    }
     chats.forEach((chat) => {
       const div = document.createElement("div");
 
@@ -110,11 +120,16 @@ async function loadChats() {
       }`;
 
       div.innerHTML = `
-        <span onclick="switchChat('${chat._id}')">
-          ${chat.messages[0]?.content.slice(0, 20) || "New Chat"}...
-        </span>
-        <span onclick="deleteChat('${chat._id}')">🗑️</span>
-      `;
+  <div class="chat-text">
+    ${chat.messages[0]?.content.slice(0, 20) || "New Chat"}...
+  </div>
+  <div class="chat-delete">
+    <i class="fa-solid fa-trash-can"></i>
+  </div>
+`;
+
+      div.querySelector(".chat-text").onclick = () => switchChat(chat._id);
+      div.querySelector(".chat-delete").onclick = () => deleteChat(chat._id);
 
       chatListDiv.appendChild(div);
     });
@@ -144,6 +159,7 @@ async function switchChat(id) {
   loadChats();
 }
 
+//creating new chat
 async function createChat() {
   const res = await fetch(`${baseAPI}/api/chat/create`, {
     method: "POST",
@@ -158,6 +174,8 @@ async function createChat() {
     loadChats();
   }
 }
+
+//delete chat
 
 async function deleteChat(id) {
   const res = await fetch(`${baseAPI}/api/chat/delete/${id}`, {
@@ -242,4 +260,6 @@ function showWelcome() {
 function hideWelcome() {
   const welcome = document.getElementById("welcomeScreen");
   if (welcome) welcome.style.display = "none";
+
+  document.getElementById("messages").style.display = "flex";
 }

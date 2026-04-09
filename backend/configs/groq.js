@@ -8,4 +8,4 @@ const groq = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
 });
 
-export default groq; // This "default" export fixes your SyntaxError
+export default groq;

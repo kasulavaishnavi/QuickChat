@@ -20,7 +20,7 @@ const userSignup = async (req, res) => {
     if (userexist) {
       return res.json({
         success: false,
-        message: "looks like your accoun already exists",
+        message: "looks like your account already exists",
       });
     }
     const user = await User.create({ name, email, password });
