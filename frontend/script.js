@@ -108,10 +108,10 @@ async function loadChats() {
     chatListDiv.innerHTML = "";
     const chats = data.chats.reverse();
 
-    if (chats.length > 0 && !currentChatId) {
-      currentChatId = chats[0]._id;
-      switchChat(currentChatId);
-    }
+    // if (chats.length > 0 && !currentChatId) {
+    //   currentChatId = chats[0]._id;
+    //   switchChat(currentChatId);
+    // }
     chats.forEach((chat) => {
       const div = document.createElement("div");
 
@@ -120,16 +120,11 @@ async function loadChats() {
       }`;
 
       div.innerHTML = `
-  <div class="chat-text">
-    ${chat.messages[0]?.content.slice(0, 20) || "New Chat"}...
-  </div>
-  <div class="chat-delete">
-    <i class="fa-solid fa-trash-can"></i>
-  </div>
-`;
-
-      div.querySelector(".chat-text").onclick = () => switchChat(chat._id);
-      div.querySelector(".chat-delete").onclick = () => deleteChat(chat._id);
+     <span onclick="switchChat('${chat._id}')">
+          ${chat.messages[0]?.content.slice(0, 20) || "New Chat"}...
+        </span>
+        <span onclick="deleteChat('${chat._id}')">🗑️</span>
+      `;
 
       chatListDiv.appendChild(div);
     });
@@ -260,6 +255,4 @@ function showWelcome() {
 function hideWelcome() {
   const welcome = document.getElementById("welcomeScreen");
   if (welcome) welcome.style.display = "none";
-
-  document.getElementById("messages").style.display = "flex";
 }
